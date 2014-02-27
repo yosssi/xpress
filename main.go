@@ -3,28 +3,24 @@ package main
 import (
 	"fmt"
 	"github.com/yosssi/xpress/app/models"
+	"github.com/yosssi/xpress/app/routes"
 	"net/http"
 )
 
-var (
-	application *models.Application
-)
-
-// init executes initial processes.
-func init() {
-	var err error
-	application, err = models.NewApplication()
+// main executes main processes.
+func main() {
+	app, err := models.NewApplication()
 	if err != nil {
 		panic(err)
 	}
+
+	routes.Routes(app)
+
+	listen(app)
 }
 
-// main executes main processes.
-func main() {
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":"+application.PortString(), nil)
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "%+v\n", application)
+// listen starts service listening.
+func listen(app *models.Application) {
+	app.Logger.Info(fmt.Sprintf("Listening on port %d.", app.Port()))
+	http.ListenAndServe(":"+app.PortString(), nil)
 }

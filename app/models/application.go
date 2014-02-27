@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/yosssi/gold"
 	"github.com/yosssi/gologger"
 	"strconv"
 )
@@ -10,11 +11,17 @@ type Application struct {
 	ServerConfig *ServerConfig
 	LoggerConfig *LoggerConfig
 	Logger       *gologger.Logger
+	Generator    *gold.Generator
+}
+
+// Port returns ServerConfig's Port.
+func (a *Application) Port() int {
+	return a.ServerConfig.Port
 }
 
 // PortString returns a string value of ServerConfig's Port.
 func (a *Application) PortString() string {
-	return strconv.Itoa(a.ServerConfig.Port)
+	return strconv.Itoa(a.Port())
 }
 
 // NewApplication generates an Application and returns it.
@@ -31,7 +38,7 @@ func NewApplication() (*Application, error) {
 
 	logger := &gologger.Logger{Name: loggerConfig.Name, Level: loggerConfig.Level, File: loggerConfig.File}
 
-	app := &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, Logger: logger}
+	generator := gold.NewGenerator(!serverConfig.Development)
 
-	return app, nil
+	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, Logger: logger, Generator: generator}, nil
 }
