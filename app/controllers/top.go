@@ -6,12 +6,9 @@ import (
 )
 
 func TopIndex(w http.ResponseWriter, r *http.Request, app *models.Application) {
-	tpl, err := app.Generator.ParseFile("./app/views/top/index.gold")
-	if err != nil {
-		panic(err)
-	}
-	err = tpl.Execute(w, nil)
-	if err != nil {
-		panic(err)
-	}
+	render("./app/views/top/index.gold", nil, w, r, app)
+}
+
+func TopIndex2(w http.ResponseWriter, r *http.Request, app *models.Application) {
+	render("./app/views/top/index2.gold", nil, w, r, app)
 }
