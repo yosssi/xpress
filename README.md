@@ -1,4 +1,3 @@
-xpress
-======
+# xpress
 
 Simple blogging service
