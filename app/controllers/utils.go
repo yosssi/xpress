@@ -22,5 +22,5 @@ func render(path string, data interface{}, w http.ResponseWriter, r *http.Reques
 // handleError handles an error.
 func handleError(w http.ResponseWriter, r *http.Request, app *models.Application, err error) {
 	app.Logger.Error(fmt.Sprintf("--- %s %s %s", r.Method, r.URL, err.Error()))
-	http.Error(w, "aa", http.StatusInternalServerError)
+	http.Error(w, app.Msg("errmsg_internal_server_error"), http.StatusInternalServerError)
 }

@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/yosssi/gold"
 	"github.com/yosssi/gologger"
+	"github.com/yosssi/xpress/app/consts"
 	"strconv"
 )
 
@@ -12,6 +13,8 @@ type Application struct {
 	LoggerConfig *LoggerConfig
 	Logger       *gologger.Logger
 	Generator    *gold.Generator
+	Locale       string
+	Dictionaries map[string]*Dictionary
 }
 
 // Port returns ServerConfig's Port.
@@ -22,6 +25,11 @@ func (a *Application) Port() int {
 // PortString returns a string value of ServerConfig's Port.
 func (a *Application) PortString() string {
 	return strconv.Itoa(a.Port())
+}
+
+// Msg returns a message from dictionaries.
+func (a *Application) Msg(s string) string {
+	return a.Dictionaries[a.Locale].Msg(s)
 }
 
 // NewApplication generates an Application and returns it.
@@ -40,5 +48,10 @@ func NewApplication() (*Application, error) {
 
 	generator := gold.NewGenerator(!serverConfig.Development)
 
-	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, Logger: logger, Generator: generator}, nil
+	dictionaries, err := NewDictionaries([]string{consts.LocaleEn, consts.LocaleJa})
+	if err != nil {
+		return nil, err
+	}
+
+	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, Logger: logger, Generator: generator, Locale: consts.LocaleEn, Dictionaries: dictionaries}, nil
 }
