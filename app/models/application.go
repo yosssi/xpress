@@ -32,6 +32,11 @@ func (a *Application) Msg(s string) string {
 	return a.Dictionaries[a.Locale].Msg(s)
 }
 
+// Development returns the Application's ServerConfig's Development.
+func (a *Application) Development() bool {
+	return a.ServerConfig.Development
+}
+
 // NewApplication generates an Application and returns it.
 func NewApplication() (*Application, error) {
 	serverConfig, err := NewServerConfig()

@@ -6,14 +6,24 @@ import (
 	"github.com/yosssi/xpress/app/controllers"
 	"github.com/yosssi/xpress/app/models"
 	"net/http"
+	"os"
 	"time"
 )
 
 // Routes connects a path to a controller's action.
 func Routes(app *models.Application) {
 	mux := routes.New()
+
 	addRoute(routes.GET, "/", mux, app, controllers.TopIndex)
-	addRoute(routes.GET, "/w", mux, app, controllers.TopIndex2)
+	addRoute(routes.GET, "/signup", mux, app, controllers.SignupIndex)
+
+	pwd, _ := os.Getwd()
+	if app.Development() {
+		mux.Static("/", pwd)
+	} else {
+		mux.Static("/public", pwd)
+	}
+
 	http.Handle("/", mux)
 }
 
