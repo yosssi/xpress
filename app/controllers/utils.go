@@ -2,8 +2,9 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/yosssi/xpress/app/models"
 	"net/http"
+
+	"github.com/yosssi/xpress/app/models"
 )
 
 // render renders an HTML.

@@ -1,8 +1,9 @@
 package controllers
 
 import (
-	"github.com/yosssi/xpress/app/models"
 	"net/http"
+
+	"github.com/yosssi/xpress/app/models"
 )
 
 func SignupIndex(w http.ResponseWriter, r *http.Request, app *models.Application) {

@@ -2,12 +2,13 @@ package routes
 
 import (
 	"fmt"
-	"github.com/drone/routes"
-	"github.com/yosssi/xpress/app/controllers"
-	"github.com/yosssi/xpress/app/models"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/drone/routes"
+	"github.com/yosssi/xpress/app/controllers"
+	"github.com/yosssi/xpress/app/models"
 )
 
 // Routes connects a path to a controller's action.

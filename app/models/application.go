@@ -1,10 +1,11 @@
 package models
 
 import (
+	"strconv"
+
 	"github.com/yosssi/gold"
 	"github.com/yosssi/gologger"
 	"github.com/yosssi/xpress/app/consts"
-	"strconv"
 )
 
 // An Application represents an application context.
