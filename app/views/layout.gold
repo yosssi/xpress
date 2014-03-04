@@ -2,10 +2,18 @@ doctype html
 html
   head
     title Xpress
-    link rel="shortcut icon" type=image/x-icon href="public/images/favicon.ico"
+    link rel="shortcut icon" type=image/x-icon href="public/img/favicon.ico"
     {{if .App.Development}}
       link rel=stylesheet type=text/css href=bower_components/bootstrap/dist/css/bootstrap.css
+      link rel=stylesheet type=text/css href=src/css/style.css
     {{else}}
+      link rel=stylesheet type=text/css href=public/css/all.min.css
     {{end}}
   body
     block content
+    {{if .App.Development}}
+      script type=text/javascript src=bower_components/bootstrap/dist/js/bootstrap.js
+    {{else}}
+      script type=text/javascript src=public/js/all.min.js
+    {{end}}
+
