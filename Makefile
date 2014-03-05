@@ -10,10 +10,17 @@ rerun:
 	make run
 stylus:
 	stylus ./src/css/style.styl
-cat:
+catcss:
 	cat ./bower_components/bootstrap/dist/css/bootstrap.css ./src/css/style.css > ./dist/css/all.css
-	cat ./bower_components/bootstrap/dist/js/bootstrap.js > ./dist/js/all.js
-uglify:
+catjs:
+	cat ./bower_components/bootstrap/dist/js/bootstrap.js ./src/js/app.js > ./dist/js/all.js
+cat:
+	make catcss
+	make catjs
+uglifycss:
 	uglifycss --ugly-comments ./dist/css/all.css > ./public/css/all.min.css
+uglifyjs:
 	uglifyjs ./dist/js/all.js -o ./public/js/all.min.js
-
+uglify:
+	make uglifycss
+	make uglifyjs
