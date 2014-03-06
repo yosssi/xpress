@@ -1,4 +1,13 @@
 {
+  "init_tasks": [
+    {
+      "command": "make stop"
+    },
+    {
+      "command": "make run",
+      "nowait": true
+    }
+  ],
   "watchers": [
     {
       "extension": "go",
