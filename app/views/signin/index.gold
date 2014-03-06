@@ -1,4 +1,8 @@
 extends ../layout
 
 block content
-  | Signup.
+  .container
+    .signin-content
+      button.btn.btn-inverse
+        i.fa.fa-github.fa-2
+        span {{.App.Msg "signin_with_github"}}

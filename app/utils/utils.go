@@ -2,7 +2,8 @@ package utils
 
 import (
 	"io/ioutil"
-	"launchpad.net/goyaml"
+
+	"github.com/go-yaml/yaml"
 )
 
 // YamlUnmarshal parses a yaml file and set the result to the out interface.
@@ -11,7 +12,7 @@ func YamlUnmarshal(path string, out interface{}) error {
 	if err != nil {
 		return err
 	}
-	if err := goyaml.Unmarshal(bytes, out); err != nil {
+	if err := yaml.Unmarshal(bytes, out); err != nil {
 		return err
 	}
 	return nil

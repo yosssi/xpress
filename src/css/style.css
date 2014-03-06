@@ -1,7 +1,11 @@
-body {
-  font-size: 1rem;
-  font-weight: bold;
+@charset 'uft-8';
+.navbar-inverse .navbar-brand {
+  color: #fff;
+  padding-left: 0;
 }
-body a {
-  color: #eee;
+.signin-content {
+  margin-top: 4rem;
+}
+.fa-2 {
+  font-size: 2rem;
 }

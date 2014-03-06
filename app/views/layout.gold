@@ -6,16 +6,20 @@ html lang={{.App.Locale}}
     title Xpress
     link rel="shortcut icon" type=image/x-icon href="public/img/favicon.ico"
     {{if .App.Development}}
-      link rel=stylesheet type=text/css href=bower_components/bootflat/bootstrap/bootstrap.css
-      link rel=stylesheet type=text/css href=bower_components/bootflat/css/font-awesome.css
-      link rel=stylesheet type=text/css href=bower_components/bootflat/css/bootflat.css
-      link rel=stylesheet type=text/css href=bower_components/bootflat/css/bootflat-extensions.css
-      link rel=stylesheet type=text/css href=bower_components/bootflat/css/bootflat-square.css
-      link rel=stylesheet type=text/css href=src/css/style.css
+      link rel=stylesheet type=text/css href=bower_components/bootflat/bootstrap/bootstrap.css media=screen
+      link rel=stylesheet type=text/css href=bower_components/bootflat/css/font-awesome.css media=screen
+      link rel=stylesheet type=text/css href=bower_components/bootflat/css/bootflat.css media=screen
+      link rel=stylesheet type=text/css href=bower_components/bootflat/css/bootflat-extensions.css media=screen
+      link rel=stylesheet type=text/css href=bower_components/bootflat/css/bootflat-square.css media=screen
+      link rel=stylesheet type=text/css href=src/css/style.css media=screen
     {{else}}
-      link rel=stylesheet type=text/css href=public/css/all.min.css
+      link rel=stylesheet type=text/css href=public/css/all.min.css media=screen
     {{end}}
   body
+    header
+      .navbar-inverse
+        .container
+          a.navbar-brand href=/ Xpress
     block content
     {{if .App.Development}}
       script type=text/javascript src=bower_components/jquery/dist/jquery.js
