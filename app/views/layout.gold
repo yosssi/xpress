@@ -12,6 +12,7 @@ html
   body
     block content
     {{if .App.Development}}
+      script type=text/javascript src=bower_components/jquery/dist/jquery.js
       script type=text/javascript src=bower_components/bootstrap/dist/js/bootstrap.js
     {{else}}
       script type=text/javascript src=public/js/all.min.js

@@ -1,3 +1,3 @@
 name: xpress
 level: TRACE
-file: ""
+file: ./log/xpress.log

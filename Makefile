@@ -13,7 +13,8 @@ stylus:
 catcss:
 	cat ./bower_components/bootstrap/dist/css/bootstrap.css ./src/css/style.css > ./dist/css/all.css
 catjs:
-	cat ./bower_components/bootstrap/dist/js/bootstrap.js ./src/js/app.js > ./dist/js/all.js
+	cat ./bower_components/jquery/dist/jquery.js ./bower_components/bootstrap/dist/js/bootstrap.js > ./dist/js/all.js
+	cat ./src/js/app.js >> ./dist/js/all.js
 cat:
 	make catcss
 	make catjs
