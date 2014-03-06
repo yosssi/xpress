@@ -16,7 +16,7 @@ func Routes(app *models.Application) {
 	mux := routes.New()
 
 	addRoute(routes.GET, "/", mux, app, controllers.TopIndex)
-	addRoute(routes.GET, "/signup", mux, app, controllers.SignupIndex)
+	addRoute(routes.GET, "/signin", mux, app, controllers.SigninIndex)
 
 	pwd, _ := os.Getwd()
 	if app.Development() {

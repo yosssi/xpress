@@ -52,6 +52,18 @@
           "command": "make uglifyjs"
         }
       ]
+    },
+    {
+      "extension": "yml",
+      "tasks": [
+        {
+          "command": "make stop"
+        },
+        {
+          "command": "make run",
+          "nowait": true
+        }
+      ]
     }
   ]
 }

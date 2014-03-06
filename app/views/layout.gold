@@ -1,10 +1,16 @@
 doctype html
-html
+html lang={{.App.Locale}}
   head
+    meta charset=utf-8
+    meta name=viewport content="width=device-width,user-scalable=no,maximum-scale=1"
     title Xpress
     link rel="shortcut icon" type=image/x-icon href="public/img/favicon.ico"
     {{if .App.Development}}
-      link rel=stylesheet type=text/css href=bower_components/bootstrap/dist/css/bootstrap.css
+      link rel=stylesheet type=text/css href=bower_components/bootflat/bootstrap/bootstrap.css
+      link rel=stylesheet type=text/css href=bower_components/bootflat/css/font-awesome.css
+      link rel=stylesheet type=text/css href=bower_components/bootflat/css/bootflat.css
+      link rel=stylesheet type=text/css href=bower_components/bootflat/css/bootflat-extensions.css
+      link rel=stylesheet type=text/css href=bower_components/bootflat/css/bootflat-square.css
       link rel=stylesheet type=text/css href=src/css/style.css
     {{else}}
       link rel=stylesheet type=text/css href=public/css/all.min.css
@@ -13,7 +19,7 @@ html
     block content
     {{if .App.Development}}
       script type=text/javascript src=bower_components/jquery/dist/jquery.js
-      script type=text/javascript src=bower_components/bootstrap/dist/js/bootstrap.js
+      script type=text/javascript src=bower_components/bootflat/js/bootstrap.js
     {{else}}
       script type=text/javascript src=public/js/all.min.js
     {{end}}
