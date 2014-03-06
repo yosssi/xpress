@@ -4,7 +4,10 @@
       "extension": "go",
       "tasks": [
         {
-          "command": "make rerun",
+          "command": "make stop"
+        },
+        {
+          "command": "make run",
           "nowait": true
         }
       ]
