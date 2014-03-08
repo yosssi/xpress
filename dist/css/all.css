@@ -9129,9 +9129,14 @@ fieldset[disabled] .radio,
   color: #fff;
   padding-left: 0;
 }
-.signin-content {
+.container-main-top {
   margin-top: 4rem;
 }
 .fa-2 {
   font-size: 2rem;
+}
+.btn-signin span {
+  margin-left: 0.7rem;
+  position: relative;
+  bottom: 0.2rem;
 }

@@ -20,16 +20,3 @@ func NewDictionary(locale string) (*Dictionary, error) {
 	}
 	return dictionary, nil
 }
-
-// NewDictionaries generates a map of dictionaries and returns it.
-func NewDictionaries(locales []string) (map[string]*Dictionary, error) {
-	dictionaries := make(map[string]*Dictionary)
-	for _, locale := range locales {
-		dictionary, err := NewDictionary(locale)
-		if err != nil {
-			return nil, err
-		}
-		dictionaries[locale] = dictionary
-	}
-	return dictionaries, nil
-}

@@ -16,6 +16,8 @@
   ],
   "dependencies": {
     "jquery": "~2.1.0",
-    "bootflat": "*"
+    "bootflat": "*",
+    "backbone": "~1.1.2",
+    "underscore": "~1.6.0"
   }
 }

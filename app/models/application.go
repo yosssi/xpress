@@ -15,7 +15,7 @@ type Application struct {
 	Logger       *gologger.Logger
 	Generator    *gold.Generator
 	Locale       string
-	Dictionaries map[string]*Dictionary
+	Dictionary   *Dictionary
 }
 
 // Port returns ServerConfig's Port.
@@ -30,7 +30,7 @@ func (a *Application) PortString() string {
 
 // Msg returns a message from dictionaries.
 func (a *Application) Msg(s string) string {
-	return a.Dictionaries[a.Locale].Msg(s)
+	return a.Dictionary.Msg(s)
 }
 
 // Development returns the Application's ServerConfig's Development.
@@ -54,10 +54,12 @@ func NewApplication() (*Application, error) {
 
 	generator := gold.NewGenerator(!serverConfig.Development)
 
-	dictionaries, err := NewDictionaries([]string{consts.LocaleEn, consts.LocaleJa})
+	locale := consts.LocaleEn
+
+	dictionary, err := NewDictionary(locale)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, Logger: logger, Generator: generator, Locale: consts.LocaleEn, Dictionaries: dictionaries}, nil
+	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary}, nil
 }

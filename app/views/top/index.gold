@@ -1,4 +1,7 @@
 extends ../layout
 
 block content
-  | Hello Xpress.
+  .container.container-main-top
+    | Hello Xpress.
+
+block js

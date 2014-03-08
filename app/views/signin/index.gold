@@ -1,8 +1,23 @@
 extends ../layout
 
 block content
-  .container
-    .signin-content
-      button.btn.btn-inverse
-        i.fa.fa-github.fa-2
-        span {{.App.Msg "signin_with_github"}}
+  .container.container-main-top
+    button#btn-signin.btn.btn-inverse.btn-signin
+      i.fa.fa-github.fa-2
+      span {{.App.Msg "signin_with_github"}}
+
+block js
+  script.
+    page.Views.ContentView = Backbone.View.extend({
+      events: {
+        "click #btn-signin": "signin"
+      },
+      el: $("#content"),
+      initialize: function() {
+        _.bindAll(this, "signin");
+      },
+      signin: function(e) {
+        alert(1);
+      }
+    });
+    page.views.contentView = new page.Views.ContentView();

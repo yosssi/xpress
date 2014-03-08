@@ -20,6 +20,8 @@ catcss:
 catjs:
 	cat ./bower_components/jquery/dist/jquery.js > ./dist/js/all.js
 	cat ./bower_components/bootflat/js/bootstrap.js >> ./dist/js/all.js
+	cat ./bower_components/underscore/underscore.js >> ./dist/js/all.js
+	cat ./bower_components/backbone/backbone.js >> ./dist/js/all.js
 cat:
 	make catcss
 	make catjs
@@ -30,3 +32,7 @@ uglifyjs:
 uglify:
 	make uglifycss
 	make uglifyjs
+compile:
+	make stylus
+	make cat
+	make uglify
