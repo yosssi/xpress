@@ -8,6 +8,6 @@ const (
 	LoggerConfigPath      = ConfigPath + "logger" + YmlExtension
 	LocaleEn              = "en"
 	LocaleJa              = "ja"
-	EnvGitHubClientID     = "XPRESS_GITHUB_CLIENT_ID"
-	EnvGitHubClientSecret = "XPRESS_GITHUB_CLIENT_SECRET"
+	EnvGitHubClientID     = "X_GH_ID"
+	EnvGitHubClientSecret = "X_GH_SECRET"
 )
