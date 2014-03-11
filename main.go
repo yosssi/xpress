@@ -23,6 +23,7 @@ func main() {
 
 // listen starts service listening.
 func listen(app *models.Application) {
+	app.Logger.Debug(fmt.Sprintf("app.GitHub: %+v", app.GitHub))
 	app.Logger.Info(fmt.Sprintf("Listening on port %d.", app.Port()))
 	http.ListenAndServe(":"+app.PortString(), nil)
 }
