@@ -16,6 +16,7 @@ type Application struct {
 	Generator    *gold.Generator
 	Locale       string
 	Dictionary   *Dictionary
+	GitHub       *GitHub
 }
 
 // Port returns ServerConfig's Port.
@@ -61,5 +62,7 @@ func NewApplication() (*Application, error) {
 		return nil, err
 	}
 
-	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary}, nil
+	github := NewGitHub()
+
+	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary, GitHub: github}, nil
 }
