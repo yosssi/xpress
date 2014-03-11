@@ -9,3 +9,7 @@ import (
 func SigninIndex(w http.ResponseWriter, r *http.Request, app *models.Application) {
 	render("./app/views/signin/index.gold", nil, w, r, app)
 }
+
+func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Application) {
+	render("./app/views/signin/index.gold", nil, w, r, app)
+}

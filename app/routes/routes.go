@@ -17,6 +17,7 @@ func Routes(app *models.Application) {
 
 	addRoute(routes.GET, "/", mux, app, controllers.TopIndex)
 	addRoute(routes.GET, "/signin", mux, app, controllers.SigninIndex)
+	addRoute(routes.GET, "/signin/callback", mux, app, controllers.SigninCallback)
 
 	pwd, _ := os.Getwd()
 	if app.Development() {
