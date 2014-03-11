@@ -1,6 +1,5 @@
 install:
 	bower install
-	sudo npm install
 run:
 	go run main.go xpress
 stop:
