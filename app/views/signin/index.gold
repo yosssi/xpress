@@ -17,7 +17,7 @@ block js
         _.bindAll(this, "signin");
       },
       signin: function(e) {
-        location.href = "https://github.com/login/oauth/authorize?scope=repo&client_id={{.App.GitHub.ClientID}}";
+        location.href = "https://github.com/login/oauth/authorize?scope=repo&client_id={{.App.GitHubClient.ID}}";
       }
     });
     page.views.contentView = new page.Views.ContentView();

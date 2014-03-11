@@ -1,8 +1,10 @@
 package models
 
 import (
+	"os"
 	"strconv"
 
+	"github.com/yosssi/gogithub"
 	"github.com/yosssi/gold"
 	"github.com/yosssi/gologger"
 	"github.com/yosssi/xpress/app/consts"
@@ -16,7 +18,7 @@ type Application struct {
 	Generator    *gold.Generator
 	Locale       string
 	Dictionary   *Dictionary
-	GitHub       *GitHub
+	GitHubClient *gogithub.Client
 }
 
 // Port returns ServerConfig's Port.
@@ -62,7 +64,7 @@ func NewApplication() (*Application, error) {
 		return nil, err
 	}
 
-	github := NewGitHub()
+	githubClient := gogithub.NewClient(os.Getenv(consts.EnvGitHubClientID), os.Getenv(consts.EnvGitHubClientSecret))
 
-	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary, GitHub: github}, nil
+	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary, GitHubClient: githubClient}, nil
 }
