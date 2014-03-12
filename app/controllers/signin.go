@@ -17,9 +17,15 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 	if err != nil {
 		handleError(w, r, app, err)
 	}
-	if err := app.GitHubClient.SetAccessToken(u.Query().Get("code")); err != nil {
+	accessToken, err := app.GitHubClient.GetAccessToken(u.Query().Get("code"))
+	if err != nil {
 		handleError(w, r, app, err)
 	}
-	app.Logger.Debug(fmt.Sprintf("client: %+v", app.GitHubClient))
+	app.Logger.Debug(fmt.Sprintf("accessToken: %s", accessToken))
+	user, err := app.GitHubClient.GetAuthenticatedUser(accessToken)
+	if err != nil {
+		handleError(w, r, app, err)
+	}
+	app.Logger.Debug(fmt.Sprintf("user: %+v", user))
 	render("./app/views/signin/index.gold", nil, w, r, app)
 }
