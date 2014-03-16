@@ -1,5 +1,3 @@
 # xpress
 
 Simple blogging service
-
-
