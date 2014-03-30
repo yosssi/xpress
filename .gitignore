@@ -35,4 +35,8 @@ src/js/all.js
 
 static/css/all.min.css
 static/js/all.min.js
-static/fonts
+static/fonts/FontAwesome.otf
+static/fonts/fontawesome-webfont.eot
+static/fonts/fontawesome-webfont.svg
+static/fonts/fontawesome-webfont.ttf
+static/fonts/fontawesome-webfont.woff
