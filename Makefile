@@ -1,6 +1,7 @@
 install:
 	bower install
 	make compile
+	make deploy
 run:
 	go run main.go xpress
 stop:
@@ -36,3 +37,5 @@ compile:
 	make stylus
 	make cat
 	make uglify
+deploy:
+	cp ./bower_components/bootflat/fonts/* ./static/fonts/
