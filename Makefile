@@ -1,5 +1,6 @@
 install:
 	bower install
+	make compile
 run:
 	go run main.go xpress
 stop:
@@ -32,7 +33,6 @@ uglify:
 	make uglifycss
 	make uglifyjs
 compile:
-	make install
 	make stylus
 	make cat
 	make uglify
