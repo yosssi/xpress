@@ -23,7 +23,7 @@ func Routes(app *models.Application) {
 	if app.Development() {
 		mux.Static("/", pwd)
 	} else {
-		mux.Static("/public", pwd)
+		mux.Static("/static", pwd)
 	}
 
 	http.Handle("/", mux)
