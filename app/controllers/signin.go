@@ -51,5 +51,11 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 
 	app.Logger.Debugf("code: %d, account: %+v", code, account)
 
+	if code == http.StatusOK {
+
+	} else {
+
+	}
+
 	render("./app/views/signin/index.gold", nil, w, r, app)
 }
