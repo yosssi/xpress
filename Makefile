@@ -1,5 +1,5 @@
 install:
-	bower install
+	bower install --allow-root
 	make compile
 	make deploy
 run:
