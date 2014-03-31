@@ -4,6 +4,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/yosssi/goelasticsearch"
 	"github.com/yosssi/gogithub"
 	"github.com/yosssi/gold"
 	"github.com/yosssi/gologger"
@@ -12,13 +13,15 @@ import (
 
 // An Application represents an application context.
 type Application struct {
-	ServerConfig *ServerConfig
-	LoggerConfig *LoggerConfig
-	Logger       *gologger.Logger
-	Generator    *gold.Generator
-	Locale       string
-	Dictionary   *Dictionary
-	GitHubClient *gogithub.Client
+	ServerConfig        *ServerConfig
+	LoggerConfig        *LoggerConfig
+	ElasticsearchConfig *ElasticsearchConfig
+	Logger              *gologger.Logger
+	Generator           *gold.Generator
+	Locale              string
+	Dictionary          *Dictionary
+	GitHubClient        *gogithub.Client
+	ElasticsearchClient *goelasticsearch.Client
 }
 
 // Port returns ServerConfig's Port.
@@ -53,6 +56,11 @@ func NewApplication() (*Application, error) {
 		return nil, err
 	}
 
+	elasticsearchConfig, err := NewElasticsearchConfig()
+	if err != nil {
+		return nil, err
+	}
+
 	logger := &gologger.Logger{Name: loggerConfig.Name, Level: loggerConfig.Level, File: loggerConfig.File}
 
 	generator := gold.NewGenerator(!serverConfig.Development)
@@ -66,5 +74,7 @@ func NewApplication() (*Application, error) {
 
 	githubClient := gogithub.NewClient(os.Getenv(consts.EnvGitHubClientID), os.Getenv(consts.EnvGitHubClientSecret))
 
-	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary, GitHubClient: githubClient}, nil
+	elasticsearchClient := goelasticsearch.NewClient(elasticsearchConfig.BaseUrl)
+
+	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, ElasticsearchConfig: elasticsearchConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary, GitHubClient: githubClient, ElasticsearchClient: elasticsearchClient}, nil
 }

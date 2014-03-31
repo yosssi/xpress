@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/yosssi/xpress/app/models"
@@ -22,6 +21,6 @@ func render(path string, data *interface{}, w http.ResponseWriter, r *http.Reque
 
 // handleError handles an error.
 func handleError(w http.ResponseWriter, r *http.Request, app *models.Application, err error) {
-	app.Logger.Error(fmt.Sprintf("--- %s %s %s", r.Method, r.URL, err.Error()))
+	app.Logger.Errorf("--- %s %s %s", r.Method, r.URL, err.Error())
 	http.Error(w, app.Msg("errmsg_internal_server_error"), http.StatusInternalServerError)
 }
