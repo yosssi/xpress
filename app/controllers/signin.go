@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 
@@ -32,30 +33,33 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 	app.Logger.Debugf("accessToken: %s", accessToken)
 
 	// get a GitHub user.
-	user, err := app.GitHubClient.GetAuthenticatedUser(accessToken)
+	ghUser, err := app.GitHubClient.GetAuthenticatedUser(accessToken)
 
 	if err != nil {
 		handleError(w, r, app, err)
 		return
 	}
 
-	app.Logger.Debugf("user: %+v", user)
+	app.Logger.Debugf("ghUser: %+v", ghUser)
 
-	// get an account.
-	code, account, err := app.ElasticsearchClient.Get(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeAccount, consts.ElasticsearchAccountTopID)
+	// get a user.
+	code, result, err := app.ElasticsearchClient.Search(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeUser, "")
 
 	if err != nil {
 		handleError(w, r, app, err)
 		return
 	}
 
-	app.Logger.Debugf("code: %d, account: %+v", code, account)
-
-	if code == http.StatusOK {
-
-	} else {
-
+	if code != http.StatusOK {
+		handleError(w, r, app, fmt.Errorf("Search API's HTTP status code is not OK. [code: %d]", code))
+		return
 	}
+
+	app.Logger.Debugf("result: %+v", result)
+
+	userMap := map[string]interface{}{"github_id": ghUser.ID, "access_token": accessToken}
+	code, result, err = app.ElasticsearchClient.Create(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeUser, userMap)
+	app.Logger.Debugf("code: %d, result: %+v, err: %+v", code, result, err)
 
 	render("./app/views/signin/index.gold", nil, w, r, app)
 }
