@@ -43,7 +43,8 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 	app.Logger.Debugf("ghUser: %+v", ghUser)
 
 	// get a user.
-	code, result, err := app.ElasticsearchClient.Search(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeUser, "")
+	result := map[string]interface{}{}
+	code, err := app.ElasticsearchClient.Search(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeUser, "", &result)
 
 	if err != nil {
 		handleError(w, r, app, err)
@@ -57,8 +58,10 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 
 	app.Logger.Debugf("result: %+v", result)
 
+	result = map[string]interface{}{}
+
 	userMap := map[string]interface{}{"github_id": ghUser.ID, "access_token": accessToken}
-	code, result, err = app.ElasticsearchClient.Create(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeUser, userMap)
+	code, err = app.ElasticsearchClient.Create(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeUser, userMap, &result)
 	app.Logger.Debugf("code: %d, result: %+v, err: %+v", code, result, err)
 
 	render("./app/views/signin/index.gold", nil, w, r, app)
