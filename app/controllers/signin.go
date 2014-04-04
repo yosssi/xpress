@@ -51,8 +51,8 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 		return
 	}
 
-	if code != http.StatusOK {
-		handleError(w, r, app, fmt.Errorf("Search API's HTTP status code is not OK. [code: %d]", code))
+	if code != http.StatusOK && code != http.StatusNotFound {
+		handleError(w, r, app, fmt.Errorf("Search API's HTTP status code is not OK or NotFound. [code: %d]", code))
 		return
 	}
 
