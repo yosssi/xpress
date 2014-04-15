@@ -1,2 +1,4 @@
 errmsg_internal_server_error: サーバでエラーが発生しました。
+errmsg_invalid_account: 初回サインイン時に使用されたGitHubアカウントと異なるため、サインインできません。
 signin_with_github: GitHubでサインイン
+note_signin_initial: "* 初回サインイン時に使用されたGitHubアカウントが管理者アカウントとなります。初回サインイン以降は、そのアカウントでのみサインインが可能となります。"

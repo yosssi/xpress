@@ -5,6 +5,7 @@ block content
     button#btn-signin.btn.btn-inverse.btn-signin
       i.fa.fa-github.fa-2
       span {{.App.Msg "signin_with_github"}}
+    p {{.App.Msg "note_signin_initial"}}
 
 block js
   script.
