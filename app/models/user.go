@@ -4,10 +4,10 @@ package models
 type User struct {
 	ID          string
 	AccessToken string
-	GitHubID    float64
+	GitHubID    int64
 }
 
 // NewUser generates a user and returns it.
-func NewUser(id string, accessToken string, gitHubID float64) *User {
+func NewUser(id string, accessToken string, gitHubID int64) *User {
 	return &User{ID: id, AccessToken: accessToken, GitHubID: gitHubID}
 }
