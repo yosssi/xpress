@@ -69,3 +69,14 @@ RUN npm install -g uglifycss
 # install Goat
 RUN curl -o /usr/local/bin/goat https://s3-ap-northeast-1.amazonaws.com/yosssi/goat/linux_amd64/goat
 RUN chmod +x /usr/local/bin/goat
+
+# install gcc.
+RUN apt-get install -y gcc
+
+# install Redis 2.8.8
+RUN curl -o /usr/local/lib/redis-2.8.8.tar.gz http://download.redis.io/releases/redis-2.8.8.tar.gz
+RUN tar -C /usr/local/lib -xzf /usr/local/lib/redis-2.8.8.tar.gz
+RUN rm /usr/local/lib/redis-2.8.8.tar.gz
+RUN cd /usr/local/lib/redis-2.8.8; make
+ENV REDIS_HOME /usr/local/lib/redis-2.8.8
+ENV PATH $PATH:$REDIS_HOME/src
