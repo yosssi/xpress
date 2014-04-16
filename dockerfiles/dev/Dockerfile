@@ -70,7 +70,7 @@ RUN npm install -g uglifycss
 RUN curl -o /usr/local/bin/goat https://s3-ap-northeast-1.amazonaws.com/yosssi/goat/linux_amd64/goat
 RUN chmod +x /usr/local/bin/goat
 
-# install gcc.
+# install gcc
 RUN apt-get install -y gcc
 
 # install Redis 2.8.8
