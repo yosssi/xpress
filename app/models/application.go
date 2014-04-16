@@ -4,6 +4,8 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/boj/redistore"
+	"github.com/gorilla/securecookie"
 	"github.com/yosssi/goelasticsearch"
 	"github.com/yosssi/gogithub"
 	"github.com/yosssi/gold"
@@ -16,12 +18,14 @@ type Application struct {
 	ServerConfig        *ServerConfig
 	LoggerConfig        *LoggerConfig
 	ElasticsearchConfig *ElasticsearchConfig
+	RedistoreConfig     *RedistoreConfig
 	Logger              *gologger.Logger
 	Generator           *gold.Generator
 	Locale              string
 	Dictionary          *Dictionary
 	GitHubClient        *gogithub.Client
 	ElasticsearchClient *goelasticsearch.Client
+	Store               *redistore.RediStore
 }
 
 // Port returns ServerConfig's Port.
@@ -61,6 +65,11 @@ func NewApplication() (*Application, error) {
 		return nil, err
 	}
 
+	redistoreConfig, err := NewRedistoreConfig()
+	if err != nil {
+		return nil, err
+	}
+
 	logger := &gologger.Logger{Name: loggerConfig.Name, Level: loggerConfig.Level, File: loggerConfig.File}
 
 	generator := gold.NewGenerator(!serverConfig.Development)
@@ -76,5 +85,11 @@ func NewApplication() (*Application, error) {
 
 	elasticsearchClient := goelasticsearch.NewClient(elasticsearchConfig.BaseUrl)
 
-	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, ElasticsearchConfig: elasticsearchConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary, GitHubClient: githubClient, ElasticsearchClient: elasticsearchClient}, nil
+	store, err := redistore.NewRediStore(redistoreConfig.Size, redistoreConfig.Network, redistoreConfig.Address, redistoreConfig.Password, []byte(securecookie.GenerateRandomKey(32)))
+	if err != nil {
+		return nil, err
+	}
+	store.SetMaxAge(redistoreConfig.MaxAge)
+
+	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, ElasticsearchConfig: elasticsearchConfig, RedistoreConfig: redistoreConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary, GitHubClient: githubClient, ElasticsearchClient: elasticsearchClient, Store: store}, nil
 }

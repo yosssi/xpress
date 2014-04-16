@@ -7,6 +7,7 @@ const (
 	ServerConfigPath         = ConfigPath + "server" + YmlExtension
 	LoggerConfigPath         = ConfigPath + "logger" + YmlExtension
 	ElasticsearchConfigPath  = ConfigPath + "elasticsearch" + YmlExtension
+	RedistoreConfigPath      = ConfigPath + "redistore" + YmlExtension
 	LocaleEn                 = "en"
 	LocaleJa                 = "ja"
 	EnvGitHubClientID        = "X_GH_ID"

@@ -5,6 +5,7 @@ import (
 	"github.com/yosssi/xpress/app/utils"
 )
 
+// A ServerConfig represents a server config.
 type ServerConfig struct {
 	Port        int  `yaml:"port"`
 	Development bool `yaml:"development"`

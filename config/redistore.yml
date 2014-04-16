@@ -1,0 +1,5 @@
+size: 10
+network: tcp
+address: :6379
+password: ""
+max_age: 604800

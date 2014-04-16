@@ -5,6 +5,7 @@ import (
 	"github.com/yosssi/xpress/app/utils"
 )
 
+// An ElasticsearchConfig represents an Elasticsearch config.
 type ElasticsearchConfig struct {
 	BaseUrl string `yaml:"baseurl"`
 }

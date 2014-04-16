@@ -5,6 +5,7 @@ import (
 	"github.com/yosssi/xpress/app/utils"
 )
 
+// A LoggerConfig represents a logger config.
 type LoggerConfig struct {
 	Name  string `yaml:"name"`
 	Level string `yaml:"level"`
