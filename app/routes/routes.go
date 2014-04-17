@@ -16,8 +16,9 @@ func Routes(app *models.Application) {
 	mux := routes.New()
 
 	addRoute(routes.GET, "/", mux, app, controllers.TopIndex)
-	addRoute(routes.GET, "/signin", mux, app, controllers.SigninIndex)
-	addRoute(routes.GET, "/signin/callback", mux, app, controllers.SigninCallback)
+	addRoute(routes.GET, "/admin", mux, app, controllers.CommonGetUser, controllers.CommonSignInRequired, controllers.AdminIndex)
+	addRoute(routes.GET, "/signin", mux, app, controllers.CommonGetUser, controllers.CommonNotSignInRequired, controllers.SigninIndex)
+	addRoute(routes.GET, "/signin/callback", mux, app, controllers.CommonGetUser, controllers.CommonNotSignInRequired, controllers.SigninCallback)
 
 	pwd, _ := os.Getwd()
 	if app.Development() {
@@ -30,14 +31,17 @@ func Routes(app *models.Application) {
 }
 
 // addRoutes adds a route.
-func addRoute(method string, pattern string, mux *routes.RouteMux, app *models.Application, handlers ...func(w http.ResponseWriter, r *http.Request, app *models.Application)) {
+func addRoute(method string, pattern string, mux *routes.RouteMux, app *models.Application, handlers ...func(http.ResponseWriter, *http.Request, *models.Application, *models.RequestContext) bool) {
 	mux.AddRoute(method, pattern, func(w http.ResponseWriter, r *http.Request) {
 		method := r.Method
 		path := r.URL.Path
 		app.Logger.Info(fmt.Sprintf("--> %s %s", method, path))
+		rCtx := models.NewRequestContext()
 		startTime := time.Now()
 		for _, handler := range handlers {
-			handler(w, r, app)
+			if !handler(w, r, app, rCtx) {
+				break
+			}
 		}
 		endTime := time.Now()
 		app.Logger.Info(fmt.Sprintf("<-- %s %s %dms", method, path, endTime.Sub(startTime)/time.Millisecond))

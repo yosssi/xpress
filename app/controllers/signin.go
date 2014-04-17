@@ -10,29 +10,35 @@ import (
 	"github.com/yosssi/xpress/app/models"
 )
 
-func SigninIndex(w http.ResponseWriter, r *http.Request, app *models.Application) {
-	render("./app/views/signin/index.gold", nil, w, r, app)
+func SigninIndex(w http.ResponseWriter, r *http.Request, app *models.Application, rCtx *models.RequestContext) bool {
+	render("./app/views/signin/index.gold", nil, w, r, app, rCtx)
+	return false
 }
 
-func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Application) {
+func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Application, rCtx *models.RequestContext) bool {
 	// parse the URL.
 	u, err := url.Parse(r.URL.String())
 	if err != nil {
 		handleError(w, r, app, err)
-		return
+		return false
+	}
+	paramCode := u.Query().Get("code")
+	if paramCode == "" {
+		http.Redirect(w, r, "/signin", http.StatusFound)
+		return false
 	}
 	// get a GitHub access token.
-	accessToken, err := app.GitHubClient.GetAccessToken(u.Query().Get("code"))
+	accessToken, err := app.GitHubClient.GetAccessToken(paramCode)
 	if err != nil {
 		handleError(w, r, app, err)
-		return
+		return false
 	}
 	app.Logger.Debugf("accessToken: %s", accessToken)
 	// get a GitHub user.
 	ghUser, err := app.GitHubClient.GetAuthenticatedUser(accessToken)
 	if err != nil {
 		handleError(w, r, app, err)
-		return
+		return false
 	}
 	app.Logger.Debugf("ghUser: %+v", ghUser)
 	searchResult := models.UserSearchResult{}
@@ -40,7 +46,7 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 	code, err := app.ElasticsearchClient.Search(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeUser, "", &searchResult)
 	if err != nil {
 		handleError(w, r, app, err)
-		return
+		return false
 	}
 
 	app.Logger.Debugf("searchResult: %+v", searchResult)
@@ -54,34 +60,34 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 		code, err = app.ElasticsearchClient.Create(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeUser, userMap, &createResult)
 		if err != nil {
 			handleError(w, r, app, err)
-			return
+			return false
 		}
-		app.Logger.Debugf("code: %d, createResult: %+v, err: %+v", code, createResult, err)
+		app.Logger.Debugf("code: %d, createResult: %+v", code, createResult)
 		user = models.NewUser(createResult.ID, accessToken, ghUser.ID)
 	case http.StatusOK:
 		user = searchResult.User()
 		if ghUser.ID != user.GitHubID {
 			app.Logger.Errorf("GitHub account is different from the expected one. [ghUser: %+v][user: %+v]", ghUser, user)
 			http.Error(w, app.Msg("errmsg_invalid_account"), http.StatusForbidden)
-			return
+			return false
 		}
 		if accessToken != user.AccessToken {
 			updateResult := models.UpdateResult{}
 			code, err = app.ElasticsearchClient.Update(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeUser, user.ID, map[string]interface{}{"doc": map[string]string{"access_token": accessToken}}, &updateResult)
 			if err != nil {
 				handleError(w, r, app, err)
-				return
+				return false
 			}
 			if code != http.StatusOK {
 				handleError(w, r, app, fmt.Errorf("Update API's HTTP status code is not OK. [code: %d]", code))
-				return
+				return false
 			}
 			app.Logger.Debugf("code: %d, updateResult: %+v, err: %+v", code, updateResult, err)
 			user.AccessToken = accessToken
 		}
 	default:
 		handleError(w, r, app, fmt.Errorf("Search API's HTTP status code is not OK or NotFound. [code: %d]", code))
-		return
+		return false
 	}
 
 	app.Logger.Debugf("user: %+v", user)
@@ -90,7 +96,7 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 	store, err := app.NewRediStore()
 	if err != nil {
 		handleError(w, r, app, fmt.Errorf("An error occurred while calling app.NewRediStore(). [error: %+v]", err))
-		return
+		return false
 	}
 	defer store.Close()
 	session, err := store.Get(r, app.RediStoreConfig.SessionKey)
@@ -98,18 +104,19 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 		if err.Error() == consts.ERR_MSG_SECURECOOKIE_NOT_VALID {
 			if err = deleteSession(session, r, w); err != nil {
 				handleError(w, r, app, fmt.Errorf("An error occurred while calling deleteSession(). [error: %+v]", err))
-				return
+				return false
 			}
 		} else {
 			handleError(w, r, app, fmt.Errorf("An error occurred while calling store.Get(). [error: %+v]", err))
-			return
+			return false
 		}
 	}
 	session.Values[consts.SessionKeyUserID] = user.ID
 	if err = sessions.Save(r, w); err != nil {
 		handleError(w, r, app, fmt.Errorf("An error occurred while calling sessions.Save(). [error: %+v]", err))
-		return
+		return false
 	}
 
-	render("./app/views/signin/index.gold", nil, w, r, app)
+	http.Redirect(w, r, "/admin", http.StatusFound)
+	return false
 }

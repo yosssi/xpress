@@ -4,14 +4,11 @@ package models
 type UserSearchResult struct {
 	Hits struct {
 		Hits []struct {
-			ID     string  `json:"_id"`
-			Index  string  `json:"_index"`
-			Score  float64 `json:"_score"`
-			Source struct {
-				AccessToken string `json:"access_token"`
-				GithubID    int64  `json:"github_id"`
-			} `json:"_source"`
-			Type string `json:"_type"`
+			ID     string     `json:"_id"`
+			Index  string     `json:"_index"`
+			Score  float64    `json:"_score"`
+			Source UserSource `json:"_source"`
+			Type   string     `json:"_type"`
 		} `json:"hits"`
 		MaxScore float64 `json:"max_score"`
 		Total    int64   `json:"total"`

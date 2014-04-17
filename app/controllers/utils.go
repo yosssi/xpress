@@ -8,13 +8,13 @@ import (
 )
 
 // render renders an HTML.
-func render(path string, data *interface{}, w http.ResponseWriter, r *http.Request, app *models.Application) {
+func render(path string, data *interface{}, w http.ResponseWriter, r *http.Request, app *models.Application, rCtx *models.RequestContext) {
 	tpl, err := app.Generator.ParseFile(path)
 	if err != nil {
 		handleError(w, r, app, err)
 		return
 	}
-	if err := tpl.Execute(w, models.NewViewData(app, data)); err != nil {
+	if err := tpl.Execute(w, models.NewViewData(app, rCtx, data)); err != nil {
 		handleError(w, r, app, err)
 		return
 	}
