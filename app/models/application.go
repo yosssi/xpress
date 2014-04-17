@@ -18,14 +18,14 @@ type Application struct {
 	ServerConfig        *ServerConfig
 	LoggerConfig        *LoggerConfig
 	ElasticsearchConfig *ElasticsearchConfig
-	RedistoreConfig     *RedistoreConfig
+	RediStoreConfig     *RediStoreConfig
 	Logger              *gologger.Logger
 	Generator           *gold.Generator
 	Locale              string
 	Dictionary          *Dictionary
 	GitHubClient        *gogithub.Client
 	ElasticsearchClient *goelasticsearch.Client
-	Store               *redistore.RediStore
+	RediStoreKeyPair    []byte
 }
 
 // Port returns ServerConfig's Port.
@@ -48,6 +48,11 @@ func (a *Application) Development() bool {
 	return a.ServerConfig.Development
 }
 
+// NewRediStore generates RediStore and returns it.
+func (a *Application) NewRediStore() (*redistore.RediStore, error) {
+	return redistore.NewRediStore(a.RediStoreConfig.Size, a.RediStoreConfig.Network, a.RediStoreConfig.Address, a.RediStoreConfig.Password, a.RediStoreKeyPair)
+}
+
 // NewApplication generates an Application and returns it.
 func NewApplication() (*Application, error) {
 	serverConfig, err := NewServerConfig()
@@ -65,7 +70,7 @@ func NewApplication() (*Application, error) {
 		return nil, err
 	}
 
-	redistoreConfig, err := NewRedistoreConfig()
+	rediStoreConfig, err := NewRediStoreConfig()
 	if err != nil {
 		return nil, err
 	}
@@ -85,11 +90,5 @@ func NewApplication() (*Application, error) {
 
 	elasticsearchClient := goelasticsearch.NewClient(elasticsearchConfig.BaseUrl)
 
-	store, err := redistore.NewRediStore(redistoreConfig.Size, redistoreConfig.Network, redistoreConfig.Address, redistoreConfig.Password, []byte(securecookie.GenerateRandomKey(32)))
-	if err != nil {
-		return nil, err
-	}
-	store.SetMaxAge(redistoreConfig.MaxAge)
-
-	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, ElasticsearchConfig: elasticsearchConfig, RedistoreConfig: redistoreConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary, GitHubClient: githubClient, ElasticsearchClient: elasticsearchClient, Store: store}, nil
+	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, ElasticsearchConfig: elasticsearchConfig, RediStoreConfig: rediStoreConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary, GitHubClient: githubClient, ElasticsearchClient: elasticsearchClient, RediStoreKeyPair: []byte(securecookie.GenerateRandomKey(32))}, nil
 }

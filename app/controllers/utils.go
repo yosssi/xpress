@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/gorilla/sessions"
 	"github.com/yosssi/xpress/app/models"
 )
 
@@ -23,4 +24,15 @@ func render(path string, data *interface{}, w http.ResponseWriter, r *http.Reque
 func handleError(w http.ResponseWriter, r *http.Request, app *models.Application, err error) {
 	app.Logger.Errorf("--- %s %s %s", r.Method, r.URL, err.Error())
 	http.Error(w, app.Msg("errmsg_internal_server_error"), http.StatusInternalServerError)
+}
+
+// deleteSession deletes the session.
+func deleteSession(session *sessions.Session, r *http.Request, w http.ResponseWriter) error {
+	maxAge := session.Options.MaxAge
+	session.Options.MaxAge = -1
+	if err := sessions.Save(r, w); err != nil {
+		return err
+	}
+	session.Options.MaxAge = maxAge
+	return nil
 }

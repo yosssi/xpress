@@ -30,13 +30,15 @@ func Routes(app *models.Application) {
 }
 
 // addRoutes adds a route.
-func addRoute(method string, pattern string, mux *routes.RouteMux, app *models.Application, handler func(w http.ResponseWriter, r *http.Request, app *models.Application)) {
+func addRoute(method string, pattern string, mux *routes.RouteMux, app *models.Application, handlers ...func(w http.ResponseWriter, r *http.Request, app *models.Application)) {
 	mux.AddRoute(method, pattern, func(w http.ResponseWriter, r *http.Request) {
 		method := r.Method
 		path := r.URL.Path
 		app.Logger.Info(fmt.Sprintf("--> %s %s", method, path))
 		startTime := time.Now()
-		handler(w, r, app)
+		for _, handler := range handlers {
+			handler(w, r, app)
+		}
 		endTime := time.Now()
 		app.Logger.Info(fmt.Sprintf("<-- %s %s %dms", method, path, endTime.Sub(startTime)/time.Millisecond))
 	})

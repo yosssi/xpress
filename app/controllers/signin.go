@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/gorilla/sessions"
 	"github.com/yosssi/xpress/app/consts"
 	"github.com/yosssi/xpress/app/models"
 )
@@ -84,6 +85,31 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 	}
 
 	app.Logger.Debugf("user: %+v", user)
+
+	// Set the user's ID to the session.
+	store, err := app.NewRediStore()
+	if err != nil {
+		handleError(w, r, app, fmt.Errorf("An error occurred while calling app.NewRediStore(). [error: %+v]", err))
+		return
+	}
+	defer store.Close()
+	session, err := store.Get(r, app.RediStoreConfig.SessionKey)
+	if err != nil {
+		if err.Error() == consts.ERR_MSG_SECURECOOKIE_NOT_VALID {
+			if err = deleteSession(session, r, w); err != nil {
+				handleError(w, r, app, fmt.Errorf("An error occurred while calling deleteSession(). [error: %+v]", err))
+				return
+			}
+		} else {
+			handleError(w, r, app, fmt.Errorf("An error occurred while calling store.Get(). [error: %+v]", err))
+			return
+		}
+	}
+	session.Values[consts.SessionKeyUserID] = user.ID
+	if err = sessions.Save(r, w); err != nil {
+		handleError(w, r, app, fmt.Errorf("An error occurred while calling sessions.Save(). [error: %+v]", err))
+		return
+	}
 
 	render("./app/views/signin/index.gold", nil, w, r, app)
 }

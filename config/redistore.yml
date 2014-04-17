@@ -3,3 +3,4 @@ network: tcp
 address: :6379
 password: ""
 max_age: 604800
+session_key: xpress
