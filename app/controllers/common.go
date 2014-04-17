@@ -19,7 +19,7 @@ func CommonGetUser(w http.ResponseWriter, r *http.Request, app *models.Applicati
 	defer store.Close()
 	session, err := store.Get(r, app.RediStoreConfig.SessionKey)
 	if err != nil {
-		if err.Error() == consts.ERR_MSG_SECURECOOKIE_NOT_VALID {
+		if err.Error() == consts.ErrMsgSecurecookieNotValid {
 			if err = deleteSession(session, r, w); err != nil {
 				handleError(w, r, app, fmt.Errorf("An error occurred while calling deleteSession(). [error: %+v]", err))
 				return false

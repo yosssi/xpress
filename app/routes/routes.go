@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -17,6 +16,7 @@ func Routes(app *models.Application) {
 
 	addRoute(routes.GET, "/", mux, app, controllers.TopIndex)
 	addRoute(routes.GET, "/admin", mux, app, controllers.CommonGetUser, controllers.CommonSignInRequired, controllers.AdminIndex)
+	addRoute(routes.POST, "/hook", mux, app, controllers.HookCreate)
 	addRoute(routes.GET, "/signin", mux, app, controllers.CommonGetUser, controllers.CommonNotSignInRequired, controllers.SigninIndex)
 	addRoute(routes.GET, "/signin/callback", mux, app, controllers.CommonGetUser, controllers.CommonNotSignInRequired, controllers.SigninCallback)
 
@@ -35,7 +35,7 @@ func addRoute(method string, pattern string, mux *routes.RouteMux, app *models.A
 	mux.AddRoute(method, pattern, func(w http.ResponseWriter, r *http.Request) {
 		method := r.Method
 		path := r.URL.Path
-		app.Logger.Info(fmt.Sprintf("--> %s %s", method, path))
+		app.Logger.Infof("--> %s %s", method, path)
 		rCtx := models.NewRequestContext()
 		startTime := time.Now()
 		for _, handler := range handlers {
@@ -44,6 +44,6 @@ func addRoute(method string, pattern string, mux *routes.RouteMux, app *models.A
 			}
 		}
 		endTime := time.Now()
-		app.Logger.Info(fmt.Sprintf("<-- %s %s %dms", method, path, endTime.Sub(startTime)/time.Millisecond))
+		app.Logger.Infof("<-- %s %s %dms", method, path, endTime.Sub(startTime)/time.Millisecond)
 	})
 }

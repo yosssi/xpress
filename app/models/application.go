@@ -88,7 +88,7 @@ func NewApplication() (*Application, error) {
 
 	githubClient := gogithub.NewClient(os.Getenv(consts.EnvGitHubClientID), os.Getenv(consts.EnvGitHubClientSecret))
 
-	elasticsearchClient := goelasticsearch.NewClient(elasticsearchConfig.BaseUrl)
+	elasticsearchClient := goelasticsearch.NewClient(elasticsearchConfig.BaseURL)
 
 	return &Application{ServerConfig: serverConfig, LoggerConfig: loggerConfig, ElasticsearchConfig: elasticsearchConfig, RediStoreConfig: rediStoreConfig, Logger: logger, Generator: generator, Locale: locale, Dictionary: dictionary, GitHubClient: githubClient, ElasticsearchClient: elasticsearchClient, RediStoreKeyPair: []byte(securecookie.GenerateRandomKey(32))}, nil
 }

@@ -7,7 +7,7 @@ import (
 
 // An ElasticsearchConfig represents an Elasticsearch config.
 type ElasticsearchConfig struct {
-	BaseUrl string `yaml:"baseurl"`
+	BaseURL string `yaml:"baseurl"`
 }
 
 // ElasticsearchConfig parses a yaml file, generates a ElasticsearchConfig and returns it.
