@@ -28,14 +28,15 @@ func SigninCallback(w http.ResponseWriter, r *http.Request, app *models.Applicat
 		return false
 	}
 	// get a GitHub access token.
-	accessToken, err := app.GitHubClient.GetAccessToken(paramCode)
+	err = app.GitHubClient.SetAccessToken(paramCode)
 	if err != nil {
 		handleError(w, r, app, err)
 		return false
 	}
+	accessToken := app.GitHubClient.AccessToken
 	app.Logger.Debugf("accessToken: %s", accessToken)
 	// get a GitHub user.
-	ghUser, err := app.GitHubClient.GetAuthenticatedUser(accessToken)
+	ghUser, err := app.GitHubClient.GetAuthenticatedUser()
 	if err != nil {
 		handleError(w, r, app, err)
 		return false

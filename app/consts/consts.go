@@ -17,4 +17,6 @@ const (
 	SessionKeyUserID           = "user_id"
 	ErrMsgSecurecookieNotValid = "securecookie: the value is not valid"
 	GitHubRefPrefix            = "refs/heads/"
+	HookResultProcessed        = "processed"
+	HookResultSkipped          = "skipped"
 )

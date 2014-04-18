@@ -26,10 +26,20 @@ func HookCreate(w http.ResponseWriter, r *http.Request, app *models.Application,
 
 	// Execute only if the commit branch is the master branch.
 	if hook.Ref != consts.GitHubRefPrefix+hook.Repository.MasterBranch {
-		fmt.Fprint(w, "")
+		app.Logger.Infof("Hook process was skipped because the hook's branch was not the master branch.")
+		fmt.Fprint(w, consts.HookResultSkipped)
 		return false
 	}
 
-	fmt.Fprint(w, "")
+	// Get the access token from Elasticsearch.
+	searchResult := models.UserSearchResult{}
+	code, err := app.ElasticsearchClient.Search(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeUser, "", &searchResult)
+	if err != nil {
+		handleError(w, r, app, err)
+		return false
+	}
+	app.Logger.Debugf("code %d, searchResult: %+v", code, searchResult)
+
+	fmt.Fprint(w, consts.HookResultProcessed)
 	return false
 }
