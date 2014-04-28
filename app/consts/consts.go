@@ -19,4 +19,6 @@ const (
 	GitHubRefPrefix            = "refs/heads/"
 	HookResultProcessed        = "processed"
 	HookResultSkipped          = "skipped"
+	HookResultError            = "error [%s]"
+	GitHubArticlesPath         = "articles"
 )
