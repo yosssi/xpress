@@ -75,6 +75,17 @@ func HookCreate(w http.ResponseWriter, r *http.Request, app *models.Application,
 	// Get added, removed or modified files.
 	for _, file := range utils.UpdatedArticleFiles(hook) {
 		app.Logger.Debugf("file: %s", file)
+		content, code, err := app.GitHubClient.GetContent(hook.Repository.Owner.Name, hook.Repository.Name, hook.Repository.MasterBranch, file)
+		if err != nil {
+			app.Logger.Error(err.Error())
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return false
+		}
+		app.Logger.Debugf("code: %dcontent:\n%s", code, content)
+		switch code {
+		case http.StatusNotFound:
+		case http.StatusOK:
+		}
 	}
 
 	// Send a message to the client.
