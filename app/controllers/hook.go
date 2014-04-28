@@ -81,7 +81,7 @@ func HookCreate(w http.ResponseWriter, r *http.Request, app *models.Application,
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return false
 		}
-		app.Logger.Debugf("code: %dcontent:\n%s", code, content)
+		app.Logger.Debugf("code: %d content:\n%s", code, content)
 		switch code {
 		case http.StatusNotFound:
 		case http.StatusOK:
