@@ -75,8 +75,6 @@ func HookCreate(app *models.Application, hooks <-chan *gogithub.Hook) {
 
 			app.Logger.Debugf("code :%d, searchResult: %+v", code, searchResult)
 
-			//var article *models.Article
-
 			article := searchResult.Article()
 
 			app.Logger.Debugf("article: %+v", article)
@@ -89,9 +87,16 @@ func HookCreate(app *models.Application, hooks <-chan *gogithub.Hook) {
 			app.Logger.Debugf("code: %d content:\n%s", code, content)
 			switch code {
 			case http.StatusNotFound:
+				if article != nil {
+
+				}
 			case http.StatusOK:
+				if article != nil {
+
+				} else {
+
+				}
 			}
 		}
-
 	}
 }
