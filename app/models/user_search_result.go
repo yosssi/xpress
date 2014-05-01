@@ -1,6 +1,6 @@
 package models
 
-// UserSearchResult represents a search result of users.
+// A UserSearchResult represents a search result of users.
 type UserSearchResult struct {
 	Hits struct {
 		Hits []struct {
@@ -16,11 +16,11 @@ type UserSearchResult struct {
 	SearchResult
 }
 
-// User generates a user and return it.
+// User generates a user and returns it.
 func (u *UserSearchResult) User() *User {
 	hits := u.Hits.Hits
 
-	if hits == nil {
+	if hits == nil || len(hits) == 0 {
 		return nil
 	}
 

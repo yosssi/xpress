@@ -3,6 +3,7 @@ package jobs
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/yosssi/gogithub"
 	"github.com/yosssi/xpress/app/consts"
@@ -57,7 +58,29 @@ func HookCreate(app *models.Application, hooks <-chan *gogithub.Hook) {
 
 		// Get added, removed or modified files.
 		for _, file := range utils.UpdatedArticleFiles(hook) {
-			app.Logger.Debugf("file: %s", file)
+			var fileName string
+			if strings.Index(file, "/") != -1 {
+				fileName = strings.Split(file, "/")[1]
+			} else {
+				fileName = file
+			}
+			app.Logger.Debugf("file: %s, fileName: %s", file, fileName)
+			searchResult := models.ArticleSearchResult{}
+			// get an article.
+			code, err := app.ElasticsearchClient.Search(consts.ElasticsearchIndexXpress, consts.ElasticsearchTypeArticle, "file_name:"+fileName, &searchResult)
+			if err != nil {
+				app.Logger.Error(err.Error())
+				return
+			}
+
+			app.Logger.Debugf("code :%d, searchResult: %+v", code, searchResult)
+
+			//var article *models.Article
+
+			article := searchResult.Article()
+
+			app.Logger.Debugf("article: %+v", article)
+
 			content, code, err := app.GitHubClient.GetContent(hook.Repository.Owner.Name, hook.Repository.Name, hook.Repository.MasterBranch, file)
 			if err != nil {
 				app.Logger.Error(err.Error())

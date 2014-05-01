@@ -13,6 +13,7 @@ const (
 	EnvGitHubClientID          = "X_GH_ID"
 	EnvGitHubClientSecret      = "X_GH_SECRET"
 	ElasticsearchIndexXpress   = "xpress"
+	ElasticsearchTypeArticle   = "article"
 	ElasticsearchTypeUser      = "user"
 	SessionKeyUserID           = "user_id"
 	ErrMsgSecurecookieNotValid = "securecookie: the value is not valid"
