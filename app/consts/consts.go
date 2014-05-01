@@ -18,7 +18,5 @@ const (
 	ErrMsgSecurecookieNotValid = "securecookie: the value is not valid"
 	GitHubRefPrefix            = "refs/heads/"
 	HookResultProcessed        = "processed"
-	HookResultSkipped          = "skipped"
-	HookResultError            = "error [%s]"
 	GitHubArticlesPath         = "articles"
 )

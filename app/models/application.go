@@ -26,6 +26,7 @@ type Application struct {
 	GitHubClient        *gogithub.Client
 	ElasticsearchClient *goelasticsearch.Client
 	RediStoreKeyPair    []byte
+	HookC               chan<- *gogithub.Hook
 }
 
 // Port returns ServerConfig's Port.

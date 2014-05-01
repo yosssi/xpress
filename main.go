@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/yosssi/gogithub"
+	"github.com/yosssi/xpress/app/jobs"
 	"github.com/yosssi/xpress/app/models"
 	"github.com/yosssi/xpress/app/routes"
 )
@@ -16,6 +18,10 @@ func main() {
 	}
 
 	routes.Routes(app)
+
+	hookC := make(chan *gogithub.Hook, 1)
+	app.HookC = hookC
+	go jobs.HookCreate(app, hookC)
 
 	listen(app)
 }
